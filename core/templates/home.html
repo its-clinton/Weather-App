@@ -1,86 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Weather</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>Weather App</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <section class="hero is-info">
-        <div class="hero-body">
-            <div class="container">
-                <h1 style="text-align: center;" class="title">
-                    Get Your Weather Info Here
-                </h1>
-            </div>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-offset-4 is-4">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <div class="field has-addons">
-                            <div class="control is-expanded">
-                                {{ form.name }}
-                            </div>
-                            <div class="control">
-                                <button class="button is-info">
-                                    Add City
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <div class="columns is-multiline">
+    <div class="container">
+        <h1 style="text-align: center;" class="mt-5">Weather App</h1>
+
+        <!-- <h2 class="mt-4">Add City</h2> -->
+        <form style="align-items: center; display: flex; justify-content: center;"  action="{% url 'core:weather' %}" method="post" class="mb-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add City</button>
+        </form>
+        {% if weather_data %}
+            <form action="{% url 'core:weather' %}" method="post" class="mb-4">
+                {% csrf_token %}
                 {% for weather in weather_data %}
-                <div class="column is-4">
-                    <div class="box">
-                        <article class="media">
-                            <div class="media-left">
-                                <figure class="image is-50x50">
-                                    <img src="http://openweathermap.org/img/w/10d.png" alt="Image">
-                                </figure>
-                            </div>
-                            <div class="media-content">
-                                <div class="content">
-                                    <p>
-                                        <span class="title">{{ weather.city }}</span>
-                                        <br>
-                                        <span class="subtitle">{{ weather.temperature }}° C</span>
-                                        <br> {{ weather.description }}
-                                    </p>
-                                    <button type="submit" class="btn btn-sm btn-primary text-white">
-                                        <a href="">Delete</a>
-                                    </button>
-                                </div>
-                            </div>
-                        </article>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="city_id" value="{{ weather.id }}">
+                            <label class="form-check-label">
+                                <h3 class="card-title">{{ weather.city }}</h>
+                                <p class="card-text">Temperature: {{ weather.temperature }}°C</p>
+                                <p class="card-text">{{ weather.description }}</p>
+                            </label>
+                        </div>
                     </div>
-                </div> 
+                </div>
                 {% endfor %}
-            </div>
-        </div>
-    </section>
-    
-    <footer class="footer is-info">
-        <div class="container">
-            <div class="content has-text-centered">
-                <p>
-                    <strong>WeatherApp</strong> by ClintonDeveloper
-                </p>
-    </footer>
+                <button style="align-items: center; display: flex; justify-content: center;" type="submit" class="btn btn-danger mt-3">Clear City List</button>
+            </form>
+        {% else %}
+            <p>No cities added yet.</p>
+        {% endif %}
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -2,9 +2,10 @@
 from django.urls import path
 from . import views
 
+
+app_name = 'core'
 urlpatterns = [
     path('', views.weather, name='weather'),
-    path('delete/<city_name>/', views.delete_city, name='delete_city'),
 
 ]
 
