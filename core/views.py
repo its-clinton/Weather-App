@@ -1,12 +1,9 @@
-# views.py
-
 from django.shortcuts import render, redirect, get_object_or_404
 import requests
 from .models import City
 from .forms import CityForm
 
 
-# home page
 def weather(request):
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=1d5b8a70f7a80f27141062e9f309bd73'
 
@@ -23,23 +20,26 @@ def weather(request):
         else:
             form = CityForm(request.POST)
             if form.is_valid():
-                form.save()
+                city_name = form.cleaned_data['name']
+                existing_city = City.objects.filter(name=city_name).exists()
+                if not existing_city:
+                    form.save()
 
     form = CityForm()
     cities = City.objects.all()
     weather_data = []
 
     for city in cities:
-        city_weather = requests.get(url.format(city)).json()
+        city_weather = requests.get(url.format(city.name)).json()
         if 'main' in city_weather:
-            city_weather = {
+            city_data = {
                 'id': city.id,
                 'city': city.name,
                 'temperature': round((city_weather['main']['temp'] - 32) * 5/9),
                 'description': city_weather['weather'][0]['description'],
                 'icon': city_weather['weather'][0]['icon'],
             }
-            weather_data.append(city_weather)
+            weather_data.append(city_data)
         else:
             city.delete()
 
