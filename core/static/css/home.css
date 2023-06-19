@@ -19,7 +19,7 @@
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
-    resize: vertical;
+    /* resize: vertical; */
     text-align: center;     
 }
 
@@ -58,17 +58,23 @@ input[type=text], select {
     text-align: center;
 }
 /* footer */
-.footer {
-    /* position: fixed; */
+.myfooter{
+    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
+    margin-top: 20;
     background-color: #4CAF50;
     color: white;
-    text-align: center;
-    height: 100px;
+    /* text-align: center; */
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-
+}
+body{
+    margin-top: 80px;
+}
+.card-body{
+    text-align: center;
 }
